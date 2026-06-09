@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TRMNL X Hong Kong Enterprise Dashboard</title>
+  <style>
+    /* Reset and variable assignments for 16-level grayscale optimization */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-color: #ffffff;
+      color: #111111;
+      width: 1872px;
+      height: 1404px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      padding: 48px;
+    }
+
+    /* Top Header Block */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-bottom: 8px solid #111111;
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+    }
+
+    .brand-group h1 {
+      font-size: 72px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .brand-group p {
+      font-size: 26px;
+      color: #444444;
+      font-weight: 500;
+      margin-top: 8px;
+    }
+
+    #time-stamp {
+      font-size: 32px;
+      font-weight: 700;
+      text-align: right;
+      color: #222222;
+    }
+
+    /* Main Content Layout splits upper dashboard into half */
+    .upper-deck {
+      display: grid;
+      grid-template-columns: 1000px 1fr;
+      gap: 48px;
+      height: 620px;
+      margin-bottom: 40px;
+    }
+
+    /* Left Primary Engine */
+    .hero-weather-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .main-temp-row {
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .giant-temp {
+      font-size: 220px;
+      font-weight: 900;
+      line-height: 0.8;
+      letter-spacing: -6px;
+    }
+
+    .giant-unit {
+      font-size: 72px;
+      font-weight: 800;
+      margin-top: 20px;
+      margin-left: 10px;
+    }
+
+    .condition-statement {
+      font-size: 42px;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-top: 20px;
+      color: #111111;
+    }
+
+    /* 2x2 Metric Grid utilizing grayscale shades */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 32px;
+    }
+
+    .metric-card {
+      background-color: #f5f5f5; /* Grayscale level 2 */
+      border-left: 6px solid #222222;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .metric-label {
+      font-size: 18px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #555555;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .metric-value {
+      font-size: 38px;
+      font-weight: 800;
+      color: #111111;
+    }
+
+    /* Right Threat Matrix Panel */
+    .threat-matrix {
+      border: 6px solid #111111;
+      border-radius: 12px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      background-color: #ffffff;
+    }
+
+    .threat-matrix.active {
+      background-color: #222222; /* High contrast dark gray */
+      color: #ffffff;
+    }
+
+    .threat-header {
+      font-size: 28px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      border-bottom: 4px solid #111111;
+      padding-bottom: 12px;
+      margin-bottom: 24px;
+    }
+
+    .threat-matrix.active .threat-header {
+      border-color: #ffffff;
+    }
+
+    .threat-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .threat-item {
+      font-size: 32px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .threat-badge {
+      background-color: #111111;
+      color: #ffffff;
+      padding: 6px 14px;
+      font-size: 18px;
+      font-weight: 900;
+      border-radius: 6px;
+    }
+
+    .threat-matrix.active .threat-badge {
+      background-color: #ffffff;
+      color: #222222;
+    }
+
+    .no-threats {
+      font-size: 32px;
+      font-weight: 700;
+      color: #777777;
+      text-align: center;
+      margin: auto 0;
+      font-style: italic;
+    }
+
+    /* Middle Deck: Regional Weather Network Arrays */
+    .middle-deck {
+      margin-bottom: 40px;
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+      border-bottom: 2px solid #111111;
+      padding-bottom: 6px;
+    }
+
+    .regional-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+
+    .regional-node {
+      background: #ffffff;
+      border: 3px solid #dddddd;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .node-name {
+      font-size: 22px;
+      font-weight: 700;
+      color: #333333;
+    }
+
+    .node-temp {
+      font-size: 32px;
+      font-weight: 800;
+    }
+
+    /* Lower Deck: 9-Day Outlook Engine */
+    .lower-deck {
+      margin-top: auto;
+    }
+
+    .forecast-row {
+      display: grid;
+      grid-template-columns: repeat(9, 1fr);
+      gap: 16px;
+    }
+
+    .forecast-card {
+      background-color: #fafafa;
+      border: 2px solid #eeeeee;
+      padding: 18px 12px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 220px;
+    }
+
+    .forecast-day {
+      font-size: 18px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #555555;
+    }
+
+    .forecast-date {
+      font-size: 14px;
+      font-weight: 600;
+      color: #888888;
+      margin-bottom: 8px;
+    }
+
+    .forecast-range {
+      font-size: 24px;
+      font-weight: 800;
+      color: #111111;
+      margin: 12px 0;
+    }
+
+    .forecast-condition {
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.2;
+      color: #444444;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top row metadata infrastructure -->
+  <header>
+    <div class="brand-group">
+      <h1>Hong Kong Weather Station</h1>
+      <p id="weather-summary">Loading environmental summary observations...</p>
+    </div>
+    <div id="time-stamp">FETCHING HKT...</div>
+  </header>
+
+  <!-- Upper deck: Current Conditions and Threat matrixes -->
+  <div class="upper-deck">
+    <div class="hero-weather-panel">
+      <div class="main-temp-row">
+        <span class="giant-temp" id="main-temp">--</span>
+        <span class="giant-unit">°C</span>
+        <div style="margin-left: 48px;">
+          <div class="condition-statement" id="main-desc">Synchronizing Data streams...</div>
+        </div>
+      </div>
+
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <span class="metric-label">Relative Humidity</span>
+          <span class="metric-value" id="humidity-val">--%</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-label">UV Index Exposure</span>
+          <span class="metric-value" id="uv-val">--</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-label">Solar Radiation</span>
+          <span class="metric-value" id="solar-val">-- W/m²</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-label">Mean Sea Pressure</span>
+          <span class="metric-value" id="pressure-val">-- hPa</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="threat-matrix" id="threatBox">
+      <div class="threat-header">Active HKO Operational Warnings</div>
+      <div class="threat-list" id="threatList">
+        <div class="no-threats">Analyzing environmental vector signals...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Middle deck: High density regional telemetry grids -->
+  <div class="middle-deck">
+    <div class="section-title">Regional Weather Array Network</div>
+    <div class="regional-row" id="regionalGrid">
+      <!-- Generated dynamically -->
+    </div>
+  </div>
+
+  <!-- Lower deck: Long range planning forecast matrices -->
+  <div class="lower-deck">
+    <div class="section-title">9-Day Comprehensive Outlook Forecast</div>
+    <div class="forecast-row" id="forecastGrid">
+      <!-- Generated dynamically -->
+    </div>
+  </div>
+
+  <script>
+    async function updateDashboard() {
+      try {
+        const urlCurrent = 'https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=en';
+        const urlWarnings = 'https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=warnsum&lang=en';
+        const urlForecast = 'https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=fnd&lang=en';
+
+        const [resCurrent, resWarnings, resForecast] = await Promise.all([
+          fetch(urlCurrent), fetch(urlWarnings), fetch(urlForecast)
+        ]);
+
+        const currentData = await resCurrent.json();
+        const warningData = await resWarnings.json();
+        const forecastData = await resForecast.json();
+
+        // 1. Process Core Telemetry
+        if (currentData.temperature && currentData.temperature.data) {
+          const hkoMain = currentData.temperature.data.find(d => d.place === 'Hong Kong Observatory');
+          document.getElementById('main-temp').innerText = hkoMain ? hkoMain.value : currentData.temperature.data[0].value;
+        }
+        
+        if (currentData.humidity && currentData.humidity.data) {
+          document.getElementById('humidity-val').innerText = currentData.humidity.val + '%';
+        }
+
+        if (currentData.uvindex && currentData.uvindex.data && currentData.uvindex.data.length > 0) {
+          document.getElementById('uv-val').innerText = `${currentData.uvindex.data[0].value} [${currentData.uvindex.data[0].desc}]`;
+        } else {
+          document.getElementById('uv-val').innerText = '0 [Low]';
+        }
+
+        // 2. Extra Data Extraction (Radiation & Pressure)
+        document.getElementById('solar-val').innerText = (currentData.radiationLevel && currentData.radiationLevel.data) ? `${currentData.radiationLevel.data[0].value} W/m²` : 'N/A';
+        document.getElementById('pressure-val').innerText = (currentData.barometer && currentData.barometer.data) ? `${currentData.barometer.data[0].value} hPa` : '1012 hPa';
+        document.getElementById('main-desc').innerText = currentData.weatherDescription || 'Clear';
+
+        // 3. Update top label text block
+        if (forecastData.generalSituation) {
+          document.getElementById('weather-summary').innerText = forecastData.generalSituation;
+        }
+
+        // 4. Time synchronization metrics
+        if (currentData.updateTime) {
+          const t = new Date(currentData.updateTime);
+          document.getElementById('time-stamp').innerText = t.toLocaleTimeString('en-HK', { hour: '2-digit', minute: '2-digit', hour12: true }) + ' HKT\n' + t.toLocaleDateString('en-HK', { weekday: 'short', month: 'short', day: 'numeric' });
+        }
+
+        // 5. Build Threat Matrix
+        const threatBox = document.getElementById('threatBox');
+        const threatList = document.getElementById('threatList');
+        threatList.innerHTML = '';
+        const alerts = Object.keys(warningData);
+
+        if (alerts.length > 0) {
+          threatBox.classList.add('active');
+          alerts.forEach(key => {
+            const node = document.createElement('div');
+            node.className = 'threat-item';
+            node.innerHTML = `<span class="threat-badge">${warningData[key].code}</span><span>${warningData[key].name.replace('Warning', '')}</span>`;
+            threatList.appendChild(node);
+          });
+        } else {
+          threatBox.classList.remove('active');
+          threatList.innerHTML = '<div class="no-threats">No Severe Operational Warnings Active</div>';
+        }
+
+        // 6. Build Regional Grid (Filtering for 4 primary structural pillars)
+        const targetRegions = ['Central', 'Tsim Sha Tsui', 'Sha Tin', 'Hong Kong Park'];
+        const regionalGrid = document.getElementById('regionalGrid');
+        regionalGrid.innerHTML = '';
+        
+        if (currentData.temperature && currentData.temperature.data) {
+          currentData.temperature.data.forEach(item => {
+            if (targetRegions.includes(item.place)) {
+              const card = document.createElement('div');
+              card.className = 'regional-node';
+              card.innerHTML = `<span class="node-name">${item.place}</span><span class="node-temp">${item.value}°</span>`;
+              regionalGrid.appendChild(card);
+            }
+          });
+        }
+
+        // 7. Render 9-Day outlook framework
+        const forecastGrid = document.getElementById('forecastGrid');
+        forecastGrid.innerHTML = '';
+        if (forecastData.weatherForecast) {
+          forecastData.weatherForecast.forEach(day => {
+            const card = document.createElement('div');
+            card.className = 'forecast-card';
+            
+            // Format string dates to clean labels
+            const shortDay = day.week.substring(0, 3);
+            const rawDate = day.forecastDate; // e.g. 20260610
+            const displayDate = rawDate.substring(6,8) + '/' + rawDate.substring(4,6);
+
+            card.innerHTML = `
+              <div>
+                <div class="forecast-day">${shortDay}</div>
+                <div class="forecast-date">${displayDate}</div>
+              </div>
+              <div class="forecast-range">${day.forecastMintemp.value}°–${day.forecastMaxtemp.value}°</div>
+              <div class="forecast-condition">${day.forecastWeather}</div>
+            `;
+            forecastGrid.appendChild(card);
+          });
+        }
+
+      } catch (err) {
+        console.error('Core sync matrix failure:', err);
+      }
+    }
+
+    updateDashboard();
+    setInterval(updateDashboard, 600000); // 10 minute hardware check intervals
+  </script>
+</body>
+</html>
