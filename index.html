@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TRMNL X Enterprise HK Weather Station</title>
+  <title>TRMNL X Bilingual High-Density Weather Station</title>
   <style>
-    /* Reset and variable assignments for 16-level grayscale optimization */
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang HK", "Microsoft JhengHei", sans-serif;
       -webkit-font-smoothing: antialiased;
     }
 
@@ -25,7 +23,6 @@
       padding: 48px;
     }
 
-    /* Top Header Block */
     header {
       display: flex;
       justify-content: space-between;
@@ -35,30 +32,11 @@
       margin-bottom: 32px;
     }
 
-    .brand-group h1 {
-      font-size: 72px;
-      font-weight: 900;
-      letter-spacing: -1px;
-      line-height: 1;
-      text-transform: uppercase;
-    }
+    .brand-group h1 { font-size: 64px; font-weight: 900; text-transform: uppercase; line-height: 1.1; }
+    .brand-group p { font-size: 24px; color: #444444; font-weight: 600; margin-top: 4px; }
 
-    .brand-group p {
-      font-size: 26px;
-      color: #444444;
-      font-weight: 500;
-      margin-top: 8px;
-    }
+    #time-stamp { font-size: 30px; font-weight: 700; text-align: right; line-height: 1.3; }
 
-    #time-stamp {
-      font-size: 32px;
-      font-weight: 700;
-      text-align: right;
-      color: #222222;
-      line-height: 1.3;
-    }
-
-    /* Main Content Layout splits upper dashboard into half */
     .upper-deck {
       display: grid;
       grid-template-columns: 1040px 1fr;
@@ -67,386 +45,100 @@
       margin-bottom: 40px;
     }
 
-    /* Left Primary Engine */
-    .hero-weather-panel {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .main-temp-row {
-      display: flex;
-      align-items: center;
-    }
-
-    .temp-num-group {
-      display: flex;
-      align-items: flex-start;
-    }
-
-    .giant-temp {
-      font-size: 220px;
-      font-weight: 900;
-      line-height: 0.8;
-      letter-spacing: -6px;
-    }
-
-    .giant-unit {
-      font-size: 72px;
-      font-weight: 800;
-      margin-top: 20px;
-      margin-left: 10px;
-    }
-
-    .main-icon-holder {
-      margin-left: 40px;
-      display: flex;
-      align-items: center;
-    }
-
-    .main-icon-holder svg {
-      width: 140px;
-      height: 140px;
-      stroke: #111111;
-      fill: none;
-      stroke-width: 2.5;
-    }
-
-    .condition-statement {
-      font-size: 42px;
-      font-weight: 800;
-      line-height: 1.2;
-      margin-top: 20px;
-      color: #111111;
-    }
-
-    /* 2x2 Metric Grid utilizing grayscale shades */
-    .metrics-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      margin-top: 32px;
-    }
-
-    .metric-card {
-      background-color: #f5f5f5;
-      border-left: 6px solid #222222;
-      padding: 20px 24px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .metric-label {
-      font-size: 18px;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: #555555;
-      letter-spacing: 1px;
-      margin-bottom: 4px;
-    }
-
-    .metric-value {
-      font-size: 38px;
-      font-weight: 800;
-      color: #111111;
-    }
-
-    /* Right Threat Matrix Panel */
-    .threat-matrix {
-      border: 6px solid #111111;
-      border-radius: 12px;
-      padding: 32px;
-      display: flex;
-      flex-direction: column;
-      background-color: #ffffff;
-    }
-
-    .threat-matrix.active {
-      background-color: #111111;
-      color: #ffffff;
-    }
-
-    .threat-header {
-      font-size: 28px;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      border-bottom: 4px solid #111111;
-      padding-bottom: 12px;
-      margin-bottom: 24px;
-    }
-
-    .threat-matrix.active .threat-header {
-      border-color: #ffffff;
-    }
-
-    .threat-list {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      overflow-y: hidden;
-    }
-
-    .threat-item {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-      padding: 12px 0;
-      border-bottom: 2px dashed #444444;
-    }
+    .hero-weather-panel { display: flex; flex-direction: column; justify-content: space-between; }
+    .main-temp-row { display: flex; align-items: center; }
+    .giant-temp { font-size: 210px; font-weight: 900; line-height: 0.8; letter-spacing: -6px; }
+    .giant-unit { font-size: 72px; font-weight: 800; margin-left: 10px; margin-top: 20px; }
     
-    .threat-matrix.active .threat-item {
-      border-color: #333333;
-    }
+    .main-icon-holder { margin-left: 50px; }
+    .main-icon-holder svg { width: 140px; height: 140px; stroke: #111111; fill: none; stroke-width: 2.5; }
 
-    .threat-icon-box {
-      width: 72px;
-      height: 72px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #f0f0f0;
-      border-radius: 8px;
-      padding: 8px;
-      flex-shrink: 0;
-    }
+    .condition-statement { font-size: 38px; font-weight: 800; line-height: 1.3; margin-top: 16px; }
 
-    .threat-matrix.active .threat-icon-box {
-      background-color: #ffffff;
-    }
+    .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .metric-card { background-color: #f5f5f5; border-left: 6px solid #222222; padding: 20px 24px; }
+    .metric-label { font-size: 18px; font-weight: 800; color: #555555; text-transform: uppercase; margin-bottom: 4px; }
+    .metric-value { font-size: 34px; font-weight: 800; }
 
-    .threat-icon-box svg {
-      width: 100%;
-      height: 100%;
-      stroke: #111111;
-      fill: none;
-      stroke-width: 2.5;
-    }
+    .threat-matrix { border: 6px solid #111111; border-radius: 12px; padding: 32px; display: flex; flex-direction: column; }
+    .threat-matrix.active { background-color: #111111; color: #ffffff; }
+    .threat-header { font-size: 26px; font-weight: 900; border-bottom: 4px solid #111111; padding-bottom: 12px; margin-bottom: 24px; }
+    .threat-matrix.active .threat-header { border-color: #ffffff; }
 
-    .threat-info-block {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
+    .threat-list { display: flex; flex-direction: column; gap: 16px; }
+    .threat-item { display: flex; align-items: center; gap: 24px; padding: 12px 0; border-bottom: 2px dashed #444444; }
+    .threat-icon-box { width: 76px; height: 76px; background-color: #f0f0f0; border-radius: 8px; padding: 8px; flex-shrink: 0; }
+    .threat-matrix.active .threat-icon-box { background-color: #ffffff; }
+    .threat-icon-box svg { width: 100%; height: 100%; stroke: #111111; fill: none; stroke-width: 2.5; }
+    .threat-title { font-size: 30px; font-weight: 800; line-height: 1.1; }
+    .threat-en-label { font-size: 16px; color: #666666; font-weight: 700; display: block; }
+    .threat-matrix.active .threat-en-label { color: #b5b5b5; }
+    .no-threats { font-size: 32px; font-weight: 700; color: #777777; text-align: center; margin: auto 0; font-style: italic; }
 
-    .threat-title {
-      font-size: 28px;
-      font-weight: 800;
-      line-height: 1.2;
-    }
+    .middle-deck { margin-bottom: 40px; }
+    .section-title { font-size: 24px; font-weight: 800; border-bottom: 2px solid #111111; padding-bottom: 6px; margin-bottom: 16px; }
+    .regional-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+    .regional-node { border: 3px solid #dddddd; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .node-name-box { display: flex; flex-direction: column; }
+    .node-zh { font-size: 22px; font-weight: 800; }
+    .node-en { font-size: 14px; color: #666666; font-weight: 700; }
+    .node-temp { font-size: 32px; font-weight: 800; }
 
-    .threat-subcode {
-      font-size: 16px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #666666;
-    }
-
-    .threat-matrix.active .threat-subcode {
-      color: #b5b5b5;
-    }
-
-    .no-threats {
-      font-size: 32px;
-      font-weight: 700;
-      color: #777777;
-      text-align: center;
-      margin: auto 0;
-      font-style: italic;
-    }
-
-    /* Middle Deck: Regional Weather Network Arrays */
-    .middle-deck {
-      margin-bottom: 40px;
-    }
-
-    .section-title {
-      font-size: 24px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 16px;
-      border-bottom: 2px solid #111111;
-      padding-bottom: 6px;
-    }
-
-    .regional-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 24px;
-    }
-
-    .regional-node {
-      background: #ffffff;
-      border: 3px solid #dddddd;
-      padding: 16px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .node-name {
-      font-size: 22px;
-      font-weight: 700;
-      color: #333333;
-    }
-
-    .node-temp {
-      font-size: 32px;
-      font-weight: 800;
-    }
-
-    /* Lower Deck: 9-Day Outlook Engine */
-    .lower-deck {
-      margin-top: auto;
-    }
-
-    .forecast-row {
-      display: grid;
-      grid-template-columns: repeat(9, 1fr);
-      gap: 16px;
-    }
-
-    .forecast-card {
-      background-color: #fafafa;
-      border: 2px solid #eeeeee;
-      padding: 18px 12px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      height: 250px;
-    }
-
-    .fc-card-header {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .forecast-day {
-      font-size: 18px;
-      font-weight: 800;
-      text-transform: uppercase;
-      color: #555555;
-      line-height: 1;
-    }
-
-    .forecast-date {
-      font-size: 14px;
-      font-weight: 600;
-      color: #888888;
-    }
-
-    .fc-card-icon {
-      margin: 8px 0;
-      display: flex;
-      justify-content: center;
-    }
-
-    .fc-card-icon svg {
-      width: 48px;
-      height: 48px;
-      stroke: #111111;
-      fill: none;
-      stroke-width: 2.5;
-    }
-
-    .forecast-range {
-      font-size: 24px;
-      font-weight: 800;
-      color: #111111;
-      margin-bottom: 6px;
-    }
-
-    .forecast-condition {
-      font-size: 14px;
-      font-weight: 700;
-      line-height: 1.2;
-      color: #444444;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
+    .forecast-row { display: grid; grid-template-columns: repeat(9, 1fr); gap: 14px; }
+    .forecast-card { background-color: #fafafa; border: 2px solid #eeeeee; padding: 14px 10px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; height: 265px; }
+    .forecast-day { font-size: 18px; font-weight: 800; line-height: 1.1; }
+    .forecast-en-day { font-size: 12px; font-weight: 700; color: #666; text-transform: uppercase; }
+    .forecast-date { font-size: 13px; font-weight: 700; color: #888888; margin-top: 2px; }
+    .fc-card-icon svg { width: 44px; height: 44px; stroke: #111111; fill: none; stroke-width: 2.5; }
+    .forecast-range { font-size: 24px; font-weight: 800; margin: 6px 0; }
+    .forecast-condition { font-size: 13px; font-weight: 700; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
   </style>
 </head>
 <body>
 
-  <!-- Top row metadata infrastructure -->
   <header>
     <div class="brand-group">
-      <h1>Hong Kong Weather Station</h1>
-      <p id="weather-summary">Loading environmental summary observations...</p>
+      <h1>香港天文台氣象站</h1>
+      <p id="weather-summary">環境概述同步中...</p>
     </div>
-    <div id="time-stamp">FETCHING HKT...</div>
+    <div id="time-stamp">FETCHING...</div>
   </header>
 
-  <!-- Upper deck: Current Conditions and Threat matrixes -->
   <div class="upper-deck">
     <div class="hero-weather-panel">
       <div>
         <div class="main-temp-row">
-          <div class="temp-num-group">
-            <span class="giant-temp" id="main-temp">--</span>
-            <span class="giant-unit">°C</span>
-          </div>
-          <div class="main-icon-holder" id="main-icon">
-            <!-- Hero SVG Injected Dynamically -->
-          </div>
+          <span class="giant-temp" id="main-temp">--</span><span class="giant-unit">°C</span>
+          <div class="main-icon-holder" id="main-icon"></div>
         </div>
-        <div class="condition-statement" id="main-desc">Synchronizing Data streams...</div>
+        <div class="condition-statement" id="main-desc">系統資訊同步中...</div>
       </div>
-
       <div class="metrics-grid">
-        <div class="metric-card">
-          <span class="metric-label">Relative Humidity</span>
-          <span class="metric-value" id="humidity-val">--%</span>
-        </div>
-        <div class="metric-card">
-          <span class="metric-label">UV Index Exposure</span>
-          <span class="metric-value" id="uv-val">--</span>
-        </div>
-        <div class="metric-card">
-          <span class="metric-label">Solar Radiation</span>
-          <span class="metric-value" id="solar-val">-- W/m²</span>
-        </div>
-        <div class="metric-card">
-          <span class="metric-label">Mean Sea Pressure</span>
-          <span class="metric-value" id="pressure-val">-- hPa</span>
-        </div>
+        <div class="metric-card"><div class="metric-label">相對濕度 Humidity</div><div class="metric-value" id="humidity-val">--%</div></div>
+        <div class="metric-card"><div class="metric-label">紫外線 Exposure</div><div class="metric-value" id="uv-val">--</div></div>
+        <div class="metric-card"><div class="metric-label">太陽輻射 Radiation</div><div class="metric-value" id="solar-val">-- W/m²</div></div>
+        <div class="metric-card"><div class="metric-label">平均海平面氣壓 Pressure</div><div class="metric-value" id="pressure-val">-- hPa</div></div>
       </div>
     </div>
-
     <div class="threat-matrix" id="threatBox">
-      <div class="threat-header">Active HKO Operational Warnings</div>
+      <div class="threat-header">現正生效警告 Active Signals</div>
       <div class="threat-list" id="threatList">
-        <div class="no-threats">No Severe Operational Warnings Active</div>
+        <div class="no-threats">無警告信號生效</div>
       </div>
     </div>
   </div>
 
-  <!-- Middle deck: High density regional telemetry grids -->
   <div class="middle-deck">
-    <div class="section-title">Regional Weather Array Network</div>
-    <div class="regional-row" id="regionalGrid">
-      <!-- Generated dynamically -->
-    </div>
+    <div class="section-title">分區氣象監測網絡 Regional Networks</div>
+    <div class="regional-row" id="regionalGrid"></div>
   </div>
 
-  <!-- Lower deck: Long range planning forecast matrices -->
   <div class="lower-deck">
-    <div class="section-title">9-Day Comprehensive Outlook Forecast</div>
-    <div class="forecast-row" id="forecastGrid">
-      <!-- Generated dynamically -->
-    </div>
+    <div class="section-title">九天天氣預報 9-Day Outlook Forecast</div>
+    <div class="forecast-row" id="forecastGrid"></div>
   </div>
 
   <script>
-    // General Weather Icons
     const SVG_ICONS = {
       sunny: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>`,
       cloudy: `<svg viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>`,
@@ -455,189 +147,138 @@
       windy: `<svg viewBox="0 0 24 24"><path d="M2 4h18a2 2 0 0 1 0 4H12M2 12h14a2 2 0 0 0 0-4M2 20h20a2 2 0 0 0 0-4H8"/></svg>`
     };
 
-    // Dedicated HKO Official Warning Symbols Dictionary (Vector SVGs)
     const WARNING_ICONS = {
-      TC1: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="#111"/><path d="M12 2v7M12 15v7M2 12h7M15 12h7" stroke-width="2"/></svg>`, // Standby Signal No. 1
-      TC3: `<svg viewBox="0 0 24 24"><path d="M12 3l9 16H3l9-16z" fill="#111"/><circle cx="12" cy="13" r="2" fill="#fff" stroke="none"/></svg>`, // Strong Wind No. 3
-      TC8: `<svg viewBox="0 0 24 24"><path d="M12 2L2 12h6v10h8V12h6L12 2z" fill="#111"/></svg>`, // Gale Or Storm No. 8
-      TC9: `<svg viewBox="0 0 24 24"><path d="M12 2l10 10-10 10L2 12z" fill="#111"/></svg>`, // Increasing Gale No. 9
-      TC10: `<svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z" fill="#111"/><path d="M4 4l16 16M20 4L4 20" stroke="#fff" stroke-width="2"/></svg>`, // Hurricane No. 10
-      WRAIN: `<svg viewBox="0 0 24 24"><path d="M4 10h16v10H4z"/><path d="M12 2v4M7 4l2 2M17 4l-2 2" stroke-width="2"/></svg>`, // Amber Rainstorm
-      RRAIN: `<svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z" fill="#111"/><path d="M8 10l4-4 4 4M12 6v12" stroke="#fff" stroke-width="2"/></svg>`, // Red Rainstorm
-      BRAIN: `<svg viewBox="0 0 24 24"><path d="M12 2A10 10 0 1 0 22 12 10 10 0 0 0 12 2z" fill="#111"/><path d="M8 12h8M12 8v8" stroke="#fff" stroke-width="3"/></svg>`, // Black Rainstorm
-      WTS: `<svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-2 8 11-12h-9l2-8z" fill="#111"/></svg>`, // Thunderstorm Warning
-      WLND: `<svg viewBox="0 0 24 24"><path d="M2 22l10-14 4 5 6-7v16z" fill="#111"/></svg>`, // Landslip
-      WMSN: `<svg viewBox="0 0 24 24"><path d="M3 12h12M6 8l-3 4 3 4M21 12H9M18 8l3 4-3 4" stroke-width="3"/></svg>`, // Monsoon
-      FROST: `<svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 19" stroke-width="2.5"/></svg>`, // Frost/Cold
+      TC1: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="#111"/><path d="M12 2v7M12 15v7M2 12h7M15 12h7" stroke-width="2"/></svg>`,
+      TC3: `<svg viewBox="0 0 24 24"><path d="M12 3l9 16H3l9-16z" fill="#111"/><circle cx="12" cy="13" r="2" fill="#fff" stroke="none"/></svg>`,
+      TC8: `<svg viewBox="0 0 24 24"><path d="M12 2L2 12h6v10h8V12h6L12 2z" fill="#111"/></svg>`,
+      TC9: `<svg viewBox="0 0 24 24"><path d="M12 2l10 10-10 10L2 12z" fill="#111"/></svg>`,
+      TC10: `<svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z" fill="#111"/><path d="M4 4l16 16M20 4L4 20" stroke="#fff" stroke-width="2"/></svg>`,
+      WRAIN: `<svg viewBox="0 0 24 24"><path d="M4 10h16v10H4z"/><path d="M12 2v4M7 4l2 2M17 4l-2 2" stroke-width="2"/></svg>`,
+      RRAIN: `<svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z" fill="#111"/><path d="M8 10l4-4 4 4M12 6v12" stroke="#fff" stroke-width="2"/></svg>`,
+      BRAIN: `<svg viewBox="0 0 24 24"><path d="M12 2A10 10 0 1 0 22 12 10 10 0 0 0 12 2z" fill="#111"/><path d="M8 12h8M12 8v8" stroke="#fff" stroke-width="3"/></svg>`,
+      WTS: `<svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-2 8 11-12h-9l2-8z" fill="#111"/></svg>`,
+      WLND: `<svg viewBox="0 0 24 24"><path d="M2 22l10-14 4 5 6-7v16z" fill="#111"/></svg>`,
+      WMSN: `<svg viewBox="0 0 24 24"><path d="M3 12h12M6 8l-3 4 3 4M21 12H9M18 8l3 4-3 4" stroke-width="3"/></svg>`,
       DEFAULT: `<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="#111"/></svg>`
     };
 
-    function getVectorIcon(iconId, textDescription) {
-      const id = parseInt(iconId);
-      const desc = (textDescription || '').toLowerCase();
-      if ([50, 51, 52].includes(id) || desc.includes('sunny') || desc.includes('fine')) return SVG_ICONS.sunny;
-      if ([53, 54, 60, 61].includes(id) || desc.includes('thunderstorm') || desc.includes('squall')) return SVG_ICONS.thunderstorm;
-      if ([62, 63, 64, 65].includes(id) || desc.includes('rain') || desc.includes('shower')) return SVG_ICONS.rainy;
-      if (desc.includes('gale') || desc.includes('wind')) return SVG_ICONS.windy;
+    function getVectorIcon(iconId, txt) {
+      const id = parseInt(iconId); const t = (txt || '').toLowerCase();
+      if ([50, 51, 52].includes(id) || t.includes('sunny') || t.includes('fine') || t.includes('天晴')) return SVG_ICONS.sunny;
+      if ([53, 54, 60, 61].includes(id) || t.includes('thunderstorm') || t.includes('雷暴')) return SVG_ICONS.thunderstorm;
+      if ([62, 63, 64, 65].includes(id) || t.includes('rain') || t.includes('shower') || t.includes('雨')) return SVG_ICONS.rainy;
+      if (t.includes('gale') || t.includes('wind') || t.includes('風')) return SVG_ICONS.windy;
       return SVG_ICONS.cloudy;
     }
 
-    // Matches the active HKO operational warnings text code to a dedicated vector layout
     function getWarningSignalIcon(code, name) {
-      const c = (code || '').toUpperCase();
-      const n = (name || '').toLowerCase();
-      
-      if (c.includes('TC1')) return WARNING_ICONS.TC1;
-      if (c.includes('TC3')) return WARNING_ICONS.TC3;
-      if (c.includes('TC8')) return WARNING_ICONS.TC8;
-      if (c.includes('TC9')) return WARNING_ICONS.TC9;
+      const c = (code || '').toUpperCase(); const n = (name || '').toLowerCase();
+      if (c.includes('TC1')) return WARNING_ICONS.TC1; if (c.includes('TC3')) return WARNING_ICONS.TC3;
+      if (c.includes('TC8')) return WARNING_ICONS.TC8; if (c.includes('TC9')) return WARNING_ICONS.TC9;
       if (c.includes('TC10')) return WARNING_ICONS.TC10;
-      if (n.includes('amber rain')) return WARNING_ICONS.WRAIN;
-      if (n.includes('red rain')) return WARNING_ICONS.RRAIN;
-      if (n.includes('black rain')) return WARNING_ICONS.BRAIN;
-      if (c.includes('WTS') || n.includes('thunderstorm')) return WARNING_ICONS.WTS;
-      if (c.includes('WLND') || n.includes('landslip')) return WARNING_ICONS.WLND;
-      if (c.includes('WMSN') || n.includes('monsoon')) return WARNING_ICONS.WMSN;
-      if (n.includes('cold') || n.includes('frost')) return WARNING_ICONS.FROST;
-      
+      if (n.includes('amber') || n.includes('黃色暴雨')) return WARNING_ICONS.WRAIN;
+      if (n.includes('red') || n.includes('紅色暴雨')) return WARNING_ICONS.RRAIN;
+      if (n.includes('black') || n.includes('黑色暴雨')) return WARNING_ICONS.BRAIN;
+      if (c.includes('WTS') || n.includes('thunderstorm') || n.includes('雷暴')) return WARNING_ICONS.WTS;
+      if (c.includes('WLND') || n.includes('landslip') || n.includes('山泥傾瀉')) return WARNING_ICONS.WLND;
+      if (c.includes('WMSN') || n.includes('monsoon') || n.includes('季候風')) return WARNING_ICONS.WMSN;
       return WARNING_ICONS.DEFAULT;
     }
 
     async function updateDashboard() {
       try {
-        const urlCurrent = 'https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=en';
-        const urlWarnings = 'https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=warnsum&lang=en';
-        const urlForecast = 'https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=fnd&lang=en';
+        const cb = '&_cb=' + Date.now();
+        const base = 'https://data.weather.gov.hk/weatherAPI/opendata/weather.php?';
 
-        const [resCurrent, resWarnings, resForecast] = await Promise.all([
-          fetch(urlCurrent), fetch(urlWarnings), fetch(urlForecast)
+        const [rEn, rTc, rWnEn, rWnTc, rFcEn, rFcTc] = await Promise.all([
+          fetch(`${base}dataType=rhrread&lang=en${cb}`).then(r => r.json()),
+          fetch(`${base}dataType=rhrread&lang=tc${cb}`).then(r => r.json()),
+          fetch(`${base}dataType=warnsum&lang=en${cb}`).then(r => r.json()),
+          fetch(`${base}dataType=warnsum&lang=tc${cb}`).then(r => r.json()),
+          fetch(`${base}dataType=fnd&lang=en${cb}`).then(r => r.json()),
+          fetch(`${base}dataType=fnd&lang=tc${cb}`).then(r => r.json())
         ]);
 
-        const currentData = await resCurrent.json();
-        const warningData = await resWarnings.json();
-        const forecastData = await resForecast.json();
-
-        // 1. Process Core Telemetry
-        if (currentData.temperature && currentData.temperature.data) {
-          const hkoMain = currentData.temperature.data.find(d => d.place === 'Hong Kong Observatory');
-          document.getElementById('main-temp').innerText = hkoMain ? hkoMain.value : currentData.temperature.data[0].value;
+        if (rEn.temperature && rEn.temperature.data) {
+          const hkoMain = rEn.temperature.data.find(d => d.place === 'Hong Kong Observatory');
+          document.getElementById('main-temp').innerText = hkoMain ? hkoMain.value : rEn.temperature.data[0].value;
         }
+        document.getElementById('humidity-val').innerText = rEn.humidity.data[0].value + '%';
+        document.getElementById('uv-val').innerText = (rEn.uvindex && rEn.uvindex.data) ? `${rEn.uvindex.data[0].value} [${rEn.uvindex.data[0].desc}]` : '0 [Low]';
+        document.getElementById('solar-val').innerText = (rEn.radiationLevel && rEn.radiationLevel.data) ? `${rEn.radiationLevel.data[0].value} W/m²` : 'N/A';
+        document.getElementById('pressure-val').innerText = (rEn.barometer && rEn.barometer.data) ? `${rEn.barometer.data[0].value} hPa` : '1012 hPa';
         
-        if (currentData.humidity && currentData.humidity.data) {
-          document.getElementById('humidity-val').innerText = currentData.humidity.data[0].value + '%';
+        document.getElementById('main-desc').innerHTML = `${rTc.weatherDescription[0]} <span style="font-size:24px;color:#555;font-weight:600;margin-left:14px;">${rEn.weatherDescription[0]}</span>`;
+        document.getElementById('weather-summary').innerHTML = `${rTc.generalSituation}<br><span style="font-size:16px;color:#555;font-weight:500;">${rEn.generalSituation}</span>`;
+
+        if (rEn.icon && rEn.icon.length > 0) {
+          document.getElementById('main-icon').innerHTML = getVectorIcon(rEn.icon[0], rEn.weatherDescription[0]);
         }
 
-        if (currentData.uvindex && currentData.uvindex.data && currentData.uvindex.data.length > 0) {
-          document.getElementById('uv-val').innerText = `${currentData.uvindex.data[0].value} [${currentData.uvindex.data[0].desc}]`;
-        } else {
-          document.getElementById('uv-val').innerText = '0 [Low]';
+        if (rEn.updateTime) {
+          const t = new Date(rEn.updateTime);
+          const tStr = t.toLocaleTimeString('en-HK', { hour: '2-digit', minute: '2-digit', hour12: true });
+          const dStr = t.toLocaleDateString('en-HK', { weekday: 'short', month: 'short', day: 'numeric' });
+          document.getElementById('time-stamp').innerHTML = `<span style="font-size:14px;font-weight:800;color:#555;display:block;">天文台更新 HKO UPDATE</span><strong>${tStr}</strong><br><span style="font-size:16px;color:#444;font-weight:600;">${dStr}</span>`;
         }
 
-        document.getElementById('solar-val').innerText = (currentData.radiationLevel && currentData.radiationLevel.data) ? `${currentData.radiationLevel.data[0].value} W/m²` : 'N/A';
-        document.getElementById('pressure-val').innerText = (currentData.barometer && currentData.barometer.data) ? `${currentData.barometer.data[0].value} hPa` : '1012 hPa';
-        document.getElementById('main-desc').innerText = currentData.weatherDescription || 'Clear';
-
-        if (currentData.icon && currentData.icon.length > 0) {
-          document.getElementById('main-icon').innerHTML = getVectorIcon(currentData.icon[0], currentData.weatherDescription);
-        }
-
-        if (forecastData.generalSituation) {
-          document.getElementById('weather-summary').innerText = forecastData.generalSituation;
-        }
-
-        // 2. Clear Weather Data Release Timestamp
-        if (currentData.updateTime) {
-          const t = new Date(currentData.updateTime);
-          const timeString = t.toLocaleTimeString('en-HK', { hour: '2-digit', minute: '2-digit', hour12: true });
-          const dateString = t.toLocaleDateString('en-HK', { weekday: 'short', month: 'short', day: 'numeric' });
-          
-          document.getElementById('time-stamp').innerHTML = `
-            <span style="font-size: 14px; font-weight: 800; text-transform: uppercase; color: #555; display: block; margin-bottom: 2px;">HKO Update</span>
-            <strong>${timeString}</strong><br>
-            <span style="font-size: 18px; color: #444; font-weight: 600;">${dateString}</span>
-          `;
-        }
-
-        // 3. Build Threat Matrix WITH Dedicated Warning Signals
-        const threatBox = document.getElementById('threatBox');
-        const threatList = document.getElementById('threatList');
-        threatList.innerHTML = '';
-        const alerts = Object.keys(warningData);
-
+        // Warning threat matching panels
+        const threatBox = document.getElementById('threatBox'); const threatList = document.getElementById('threatList');
+        threatList.innerHTML = ''; const alerts = Object.keys(rWnEn);
         if (alerts.length > 0) {
           threatBox.classList.add('active');
-          alerts.forEach(key => {
-            const alertItem = warningData[key];
-            const cleanName = alertItem.name.replace('Warning', '').trim();
-            const signalSvg = getWarningSignalIcon(alertItem.code, alertItem.name);
-
-            const node = document.createElement('div');
-            node.className = 'threat-item';
+          alerts.forEach(k => {
+            const node = document.createElement('div'); node.className = 'threat-item';
             node.innerHTML = `
-              <div class="threat-icon-box">
-                ${signalSvg}
-              </div>
+              <div class="threat-icon-box">${getWarningSignalIcon(rWnEn[k].code, rWnEn[k].name)}</div>
               <div class="threat-info-block">
-                <span class="threat-title">${cleanName}</span>
-                <span class="threat-subcode">Code: ${alertItem.code || 'HKO'}</span>
-              </div>
-            `;
+                <span class="threat-title">${rWnTc[k].name.replace('警告','').replace('信號','')}</span>
+                <span class="threat-en-label">${rWnEn[k].name.replace('Warning','').trim()}</span>
+              </div>`;
             threatList.appendChild(node);
           });
         } else {
           threatBox.classList.remove('active');
-          threatList.innerHTML = '<div class="no-threats">No Severe Operational Warnings Active</div>';
+          threatList.innerHTML = '<div class="no-threats" style="padding-top:140px;">大氣穩定 / No Active HKO Alerts</div>';
         }
 
-        // 4. Build Regional Grid
-        const targetRegions = ['Central', 'Tsim Sha Tsui', 'Sha Tin', 'Hong Kong Park'];
-        const regionalGrid = document.getElementById('regionalGrid');
-        regionalGrid.innerHTML = '';
-        
-        if (currentData.temperature && currentData.temperature.data) {
-          currentData.temperature.data.forEach(item => {
-            if (targetRegions.includes(item.place)) {
-              const card = document.createElement('div');
-              card.className = 'regional-node';
-              card.innerHTML = `<span class="node-name">${item.place}</span><span class="node-temp">${item.value}°</span>`;
-              regionalGrid.appendChild(card);
-            }
-          });
-        }
+        // Regional station networks
+        const sectors = [
+          { en: 'Central', tc: '中環' }, { en: 'Tsim Sha Tsui', tc: '尖沙咀' },
+          { en: 'Sha Tin', tc: '沙田' }, { en: 'Hong Kong Park', tc: '香港公園' }
+        ];
+        const grid = document.getElementById('regionalGrid'); grid.innerHTML = '';
+        sectors.forEach(s => {
+          const match = rEn.temperature.data.find(d => d.place === s.en);
+          const val = match ? `${match.value}°` : '--°';
+          grid.innerHTML += `<div class="regional-node"><div class="node-name-box"><span class="node-zh">${s.tc}</span><span class="node-en">${s.en}</span></div><span class="node-temp">${val}</span></div>`;
+        });
 
-        // 5. Render 9-Day Forecast Row
-        const forecastGrid = document.getElementById('forecastGrid');
-        forecastGrid.innerHTML = '';
-        if (forecastData.weatherForecast) {
-          forecastData.weatherForecast.forEach(day => {
-            const card = document.createElement('div');
-            card.className = 'forecast-card';
-            
+        // 9-Day Outlook Generators
+        const fGrid = document.getElementById('forecastGrid'); fGrid.innerHTML = '';
+        if (rFcEn.weatherForecast) {
+          rFcEn.weatherForecast.forEach((day, idx) => {
+            const dayTc = rFcTc.weatherForecast[idx]; if (!dayTc) return;
+            const card = document.createElement('div'); card.className = 'forecast-card';
             const shortDay = day.week.substring(0, 3);
-            const rawDate = day.forecastDate;
-            const displayDate = rawDate.substring(6,8) + '/' + rawDate.substring(4,6);
-            const cardIcon = getVectorIcon(day.forecastIcon, day.forecastWeather);
-
+            const dLabel = day.forecastDate.substring(6,8) + '/' + day.forecastDate.substring(4,6);
             card.innerHTML = `
               <div class="fc-card-header">
-                <div class="forecast-day">${shortDay}</div>
-                <div class="forecast-date">${displayDate}</div>
+                <div class="forecast-day">${dayTc.week}</div>
+                <div class="forecast-en-day">${shortDay}</div>
+                <div class="forecast-date">${dLabel}</div>
               </div>
-              <div class="fc-card-icon">${cardIcon}</div>
+              <div class="fc-card-icon">${getVectorIcon(day.forecastIcon, day.forecastWeather)}</div>
               <div class="forecast-range">${day.forecastMintemp.value}°–${day.forecastMaxtemp.value}°</div>
-              <div class="forecast-condition">${day.forecastWeather}</div>
-            `;
-            forecastGrid.appendChild(card);
+              <div class="forecast-condition">${dayTc.forecastWeather}</div>`;
+            fGrid.appendChild(card);
           });
         }
-
-      } catch (err) {
-        console.error('Core sync matrix failure:', err);
-      }
+      } catch (err) { console.error(err); }
     }
 
     updateDashboard();
-    setInterval(updateDashboard, 3600000); // 1-hour loops
+    setInterval(updateDashboard, 3600000);
   </script>
 </body>
 </html>
