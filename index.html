@@ -99,7 +99,7 @@
   <header>
     <div class="brand-group">
       <h1>香港天文台氣象站</h1>
-      <p id="weather-summary">環境概述同步中...</p>
+      <p id="weather-summary">環境概述同步中 / Syncing Overview...</p>
     </div>
     <div id="time-stamp">FETCHING...</div>
   </header>
@@ -188,25 +188,31 @@
     async function updateDashboard() {
       try {
         const cb = '&_cb=' + Date.now();
-        const base = 'https://data.weather.gov.hk/weatherAPI/opendata/weather.php?';
+        // Encapsulating base endpoints in an absolute, raw-content open proxy handler
+        const proxy = 'https://api.allorigins.win/raw?url=';
+        const base = encodeURIComponent('https://data.weather.gov.hk/weatherAPI/opendata/weather.php?');
 
         const [rEn, rTc, rWnEn, rWnTc, rFcEn, rFcTc] = await Promise.all([
-          fetch(`${base}dataType=rhrread&lang=en${cb}`).then(r => r.json()),
-          fetch(`${base}dataType=rhrread&lang=tc${cb}`).then(r => r.json()),
-          fetch(`${base}dataType=warnsum&lang=en${cb}`).then(r => r.json()),
-          fetch(`${base}dataType=warnsum&lang=tc${cb}`).then(r => r.json()),
-          fetch(`${base}dataType=fnd&lang=en${cb}`).then(r => r.json()),
-          fetch(`${base}dataType=fnd&lang=tc${cb}`).then(r => r.json())
+          fetch(`${proxy}${base}dataType%3Drhrread%26lang%3Den${cb}`).then(r => r.json()),
+          fetch(`${proxy}${base}dataType%3Drhrread%26lang%3Dtc${cb}`).then(r => r.json()),
+          fetch(`${proxy}${base}dataType%3Dwarnsum%26lang%3Den${cb}`).then(r => r.json()),
+          fetch(`${proxy}${base}dataType%3Dwarnsum%26lang%3Dtc${cb}`).then(r => r.json()),
+          fetch(`${proxy}${base}dataType%3Dfnd%26lang%3Den${cb}`).then(r => r.json()),
+          fetch(`${proxy}${base}dataType%3Dfnd%26lang%3Dtc${cb}`).then(r => r.json())
         ]);
 
         if (rEn.temperature && rEn.temperature.data) {
           const hkoMain = rEn.temperature.data.find(d => d.place === 'Hong Kong Observatory');
           document.getElementById('main-temp').innerText = hkoMain ? hkoMain.value : rEn.temperature.data[0].value;
         }
-        document.getElementById('humidity-val').innerText = rEn.humidity.data[0].value + '%';
-        document.getElementById('uv-val').innerText = (rEn.uvindex && rEn.uvindex.data) ? `${rEn.uvindex.data[0].value} [${rEn.uvindex.data[0].desc}]` : '0 [Low]';
-        document.getElementById('solar-val').innerText = (rEn.radiationLevel && rEn.radiationLevel.data) ? `${rEn.radiationLevel.data[0].value} W/m²` : 'N/A';
-        document.getElementById('pressure-val').innerText = (rEn.barometer && rEn.barometer.data) ? `${rEn.barometer.data[0].value} hPa` : '1012 hPa';
+        
+        if (rEn.humidity && rEn.humidity.data) {
+          document.getElementById('humidity-val').innerText = rEn.humidity.data[0].value + '%';
+        }
+        
+        document.getElementById('uv-val').innerText = (rEn.uvindex && rEn.uvindex.data && rEn.uvindex.data.length > 0) ? `${rEn.uvindex.data[0].value} [${rEn.uvindex.data[0].desc}]` : '0 [Low]';
+        document.getElementById('solar-val').innerText = (rEn.radiationLevel && rEn.radiationLevel.data && rEn.radiationLevel.data.length > 0) ? `${rEn.radiationLevel.data[0].value} W/m²` : 'N/A';
+        document.getElementById('pressure-val').innerText = (rEn.barometer && rEn.barometer.data && rEn.barometer.data.length > 0) ? `${rEn.barometer.data[0].value} hPa` : '1012 hPa';
         
         document.getElementById('main-desc').innerHTML = `${rTc.weatherDescription[0]} <span style="font-size:24px;color:#555;font-weight:600;margin-left:14px;">${rEn.weatherDescription[0]}</span>`;
         document.getElementById('weather-summary').innerHTML = `${rTc.generalSituation}<br><span style="font-size:16px;color:#555;font-weight:500;">${rEn.generalSituation}</span>`;
@@ -224,7 +230,7 @@
 
         // Warning threat matching panels
         const threatBox = document.getElementById('threatBox'); const threatList = document.getElementById('threatList');
-        threatList.innerHTML = ''; const alerts = Object.keys(rWnEn);
+        threatList.innerHTML = ''; const alerts = rWnEn ? Object.keys(rWnEn) : [];
         if (alerts.length > 0) {
           threatBox.classList.add('active');
           alerts.forEach(k => {
@@ -249,14 +255,16 @@
         ];
         const grid = document.getElementById('regionalGrid'); grid.innerHTML = '';
         sectors.forEach(s => {
-          const match = rEn.temperature.data.find(d => d.place === s.en);
-          const val = match ? `${match.value}°` : '--°';
-          grid.innerHTML += `<div class="regional-node"><div class="node-name-box"><span class="node-zh">${s.tc}</span><span class="node-en">${s.en}</span></div><span class="node-temp">${val}</span></div>`;
+          if (rEn.temperature && rEn.temperature.data) {
+            const match = rEn.temperature.data.find(d => d.place === s.en);
+            const val = match ? `${match.value}°` : '--°';
+            grid.innerHTML += `<div class="regional-node"><div class="node-name-box"><span class="node-zh">${s.tc}</span><span class="node-en">${s.en}</span></div><span class="node-temp">${val}</span></div>`;
+          }
         });
 
         // 9-Day Outlook Generators
         const fGrid = document.getElementById('forecastGrid'); fGrid.innerHTML = '';
-        if (rFcEn.weatherForecast) {
+        if (rFcEn && rFcEn.weatherForecast) {
           rFcEn.weatherForecast.forEach((day, idx) => {
             const dayTc = rFcTc.weatherForecast[idx]; if (!dayTc) return;
             const card = document.createElement('div'); card.className = 'forecast-card';
@@ -274,7 +282,10 @@
             fGrid.appendChild(card);
           });
         }
-      } catch (err) { console.error(err); }
+      } catch (err) { 
+        console.error(err);
+        document.getElementById('main-desc').innerText = 'Data synchronization error. Retrying...';
+      }
     }
 
     updateDashboard();
